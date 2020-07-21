@@ -43,7 +43,7 @@ export default {
     methods: {
         setPokemonUrl(url) {
            this.pokeUrl = url
-           console.log('// Url du Pokémon ens détail //') 
+           console.log('// Url du Pokémon en détail //') 
            console.log(this.pokeUrl) 
            this.showDetail = true
         },

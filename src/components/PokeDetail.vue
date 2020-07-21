@@ -45,7 +45,9 @@
                     </ul>
                 </div>
             </div>
-            
+            <div v-if="!pokemon">
+                <h2>Pokemon not found :(</h2>
+            </div>
             <button class="btn btn-dark mb-3" @click="closeDetail">Close</button>
         </div>
       </transition>
@@ -61,23 +63,24 @@ export default {
     data() {
         return {
             pokemon: {},
-            show: false
+            show: false,
         }
     },
     methods: {
         fetchData() {
             this.$http
                 .get(this.pokeUrl)
-                .then((resp) => {
-                    if(resp.status == 200) {
-                        console.log("// Connection à l'API réussie depuis PokeDetail //")
-                        this.pokemon = resp.data
-                        this.show = true
-                        console.log(this.pokemon)
-                    }
+                 .then((resp) => {
+                    if(resp.status === 200)
+                    this.pokemon = resp.data;
+                    this.show = true;
                 })
                 .catch((error) => {
-                    console.log(error)
+                    // Error
+                    if (error.response.status == 404) {
+                        this.pokemon = false
+                        this.show = true
+                    }
                 })
         },
         closeDetail() {
@@ -91,6 +94,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+    h2 {
+        background: #ffffff;
+        padding: 20px;
+    }
 
     .detail {
         display: flex;

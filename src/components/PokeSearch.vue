@@ -29,7 +29,6 @@ export default {
         setPokemonUrl() {
             if(this.searchvalue !== '') {
                 this.$emit('setPokemonUrl', this.apiUrl + this.searchvalue)
-                // this.searchvalue.toLowerCase()
             }
         }
     }
