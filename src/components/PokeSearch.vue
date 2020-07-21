@@ -25,11 +25,6 @@ export default {
             searchvalue: ''
         }
     },
-    computed: {
-        searchvalueToLowerCase() {
-            return this.searchvalue.toLowerCase().trim()
-        }
-    },
     methods: {
         setPokemonUrl() {
             if(this.searchvalue !== '') {
