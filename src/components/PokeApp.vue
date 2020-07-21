@@ -14,13 +14,15 @@
             :imgUrl="imgUrl"
             @setPokemonUrl="setPokemonUrl"
         />
-
-        <PokeDetail 
-            v-if="showDetail"
-            :pokeUrl="pokeUrl"
-            :imgUrl="imgUrl"
-            @closeDetail="closeDetail"
-        />
+        
+        <transition leave-active-class="animate__animated animate__fadeOut">
+            <PokeDetail 
+                v-if="showDetail"
+                :pokeUrl="pokeUrl"
+                :imgUrl="imgUrl"
+                @closeDetail="closeDetail"
+            />
+        </transition>
     </div>
 </template>
 
