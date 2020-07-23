@@ -14,13 +14,15 @@
             :imgUrl="imgUrl"
             @setPokemonUrl="setPokemonUrl"
         />
-
-        <PokeDetail 
-            v-if="showDetail"
-            :pokeUrl="pokeUrl"
-            :imgUrl="imgUrl"
-            @closeDetail="closeDetail"
-        />
+        
+        <transition leave-active-class="animate__animated animate__fadeOut">
+            <PokeDetail 
+                v-if="showDetail"
+                :pokeUrl="pokeUrl"
+                :imgUrl="imgUrl"
+                @closeDetail="closeDetail"
+            />
+        </transition>
     </div>
 </template>
 
@@ -41,7 +43,7 @@ export default {
     methods: {
         setPokemonUrl(url) {
            this.pokeUrl = url
-           console.log('// Url du Pokémon ens détail //') 
+           console.log('// Url du Pokémon en détail //') 
            console.log(this.pokeUrl) 
            this.showDetail = true
         },

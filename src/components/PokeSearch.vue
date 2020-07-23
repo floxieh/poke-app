@@ -9,6 +9,7 @@
                 class="form-control" 
                 placeholder="Find a Pokemon" 
                 v-model="searchvalue"
+                @input="searchvalue = $event.target.value.toLowerCase()"
             >
         </form>
     </div>

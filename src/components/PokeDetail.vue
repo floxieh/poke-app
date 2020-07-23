@@ -1,50 +1,56 @@
 <template>
   <div class="detail">
-      <div class="detail-view" v-if="show">
-          <div class="detail-view__img mb-2" v-if="pokemon">
-            <img :src="imgUrl + pokemon.id + '.png'" class="card-img-top" alt="">
-          </div>
-          <div class="detail-view__data text-center" v-if="pokemon">
-            <span class="text-center">#{{ pokemon.id }}</span>
-            <h3 class="mb-5">{{ pokemon.name }}</h3>
-            <div class="property mb-3">
-                <div>Base experience:</div> 
-                <div class="font-weight-bold">{{ pokemon.base_experience }} XP</div>
+      <transition
+        enter-active-class="animate__animated animate__bounceIn"
+      >
+        <div class="detail-view" v-if="show">
+            <div class="detail-view__img mb-2" v-if="pokemon">
+                <img :src="imgUrl + pokemon.id + '.png'" class="card-img-top" alt="">
             </div>
-            <div class="property mb-3">
-                <div>Height:</div> 
-                <div class="font-weight-bold">{{ pokemon.height * 10 }} cm</div>
+            <div class="detail-view__data text-center" v-if="pokemon">
+                <span class="text-center">#{{ pokemon.id }}</span>
+                <h3 class="mb-5">{{ pokemon.name }}</h3>
+                <div class="property mb-3">
+                    <div>Base experience:</div> 
+                    <div class="font-weight-bold">{{ pokemon.base_experience }} XP</div>
+                </div>
+                <div class="property mb-3">
+                    <div>Height:</div> 
+                    <div class="font-weight-bold">{{ pokemon.height * 10 }} cm</div>
+                </div>
+                <div class="property mb-3">
+                    <div>Weight:</div> 
+                    <div class="font-weight-bold">{{ pokemon.weight / 10 }} kg</div>
+                </div>
+                <div class="types text-left">
+                    <span class="type">Types:</span>
+                    <ul class="types-list mt-2">
+                        <li 
+                            :key="value + index"
+                            v-for="(value, index) in pokemon.types"
+                        >
+                            {{ value.type.name }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="types text-left">
+                    <span class="type">Abilities:</span>
+                    <ul class="types-list abilities mt-2">
+                        <li 
+                            :key="value + index"
+                            v-for="(value, index) in pokemon.abilities"
+                        >
+                            {{ value.ability.name }}
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="property mb-3">
-                <div>Weight:</div> 
-                <div class="font-weight-bold">{{ pokemon.weight / 10 }} kg</div>
+            <div v-if="!pokemon">
+                <h2>Pokemon not found :(</h2>
             </div>
-            <div class="types text-left">
-                <span class="type">Types:</span>
-                <ul class="types-list mt-2">
-                    <li 
-                        :key="value + index"
-                        v-for="(value, index) in pokemon.types"
-                    >
-                        {{ value.type.name }}
-                    </li>
-                </ul>
-            </div>
-             <div class="types text-left">
-                <span class="type">Abilities:</span>
-                <ul class="types-list abilities mt-2">
-                    <li 
-                        :key="value + index"
-                        v-for="(value, index) in pokemon.abilities"
-                    >
-                        {{ value.ability.name }}
-                    </li>
-                </ul>
-            </div>
-          </div>
-          
-          <button class="btn btn-dark mb-3" @click="closeDetail">Close</button>
-      </div>
+            <button class="btn btn-dark mb-3" @click="closeDetail">Close</button>
+        </div>
+      </transition>
   </div>
 </template>
 
@@ -57,23 +63,24 @@ export default {
     data() {
         return {
             pokemon: {},
-            show: false
+            show: false,
         }
     },
     methods: {
         fetchData() {
             this.$http
                 .get(this.pokeUrl)
-                .then((resp) => {
-                    if(resp.status == 200) {
-                        console.log("// Connection à l'API réussie depuis PokeDetail //")
-                        this.pokemon = resp.data
-                        this.show = true
-                        console.log(this.pokemon)
-                    }
+                 .then((resp) => {
+                    if(resp.status === 200)
+                    this.pokemon = resp.data;
+                    this.show = true;
                 })
                 .catch((error) => {
-                    console.log(error)
+                    // Error
+                    if (error.response.status == 404) {
+                        this.pokemon = false
+                        this.show = true
+                    }
                 })
         },
         closeDetail() {
@@ -87,6 +94,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+    h2 {
+        background: #ffffff;
+        padding: 20px;
+    }
 
     .detail {
         display: flex;
@@ -173,6 +185,23 @@ export default {
 
     .abilities li {
         background: lightslategray;
+    }
+
+    .fade-enter {
+        opacity: 0;
+    }
+
+    .fade-enter-active {
+        transition: opacity 1s;
+    }
+
+    .fade-leave {
+        /*opacity: 1;*/
+    }
+
+    .fade-leave-active {
+        transition: opacity 1s;
+        opacity: 0;
     }
 
 </style>
